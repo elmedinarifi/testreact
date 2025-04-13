@@ -2,26 +2,54 @@
   "name": "task-tracker-next",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/electron/main.js",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "electron:dev": "tsc -p electron/tsconfig.json && cross-env NODE_ENV=development concurrently \"npm run dev\" \"electron .\"",
+    "electron:build": "next build && tsc -p electron/tsconfig.json && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.3.0"
+    "next": "14.1.0",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.0",
-    "@eslint/eslintrc": "^3"
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.14",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  },
+  "build": {
+    "appId": "com.tasktracker.app",
+    "productName": "Task Tracker",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "dist/electron/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }
